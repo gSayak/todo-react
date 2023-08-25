@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./components/Footer";
 import Todos from "./components/Todos";
 
+
 function App() {
   let todos = [
     {

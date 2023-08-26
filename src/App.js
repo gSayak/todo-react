@@ -8,6 +8,7 @@ import { AddTodo } from "./components/AddTodo";
 
 function App() {
   let initTodo;
+  console.log(localStorage.getItem("todos"))
   if (localStorage.getItem("todos") === null) {
     initTodo = [];
   } else {
@@ -43,9 +44,7 @@ function App() {
 
   const [todos, setTodos] = useState(initTodo);
   useEffect(() => {
-    return () => {
-      localStorage.setItem("todos", JSON.stringify(todos));
-    };
+    localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
   return (

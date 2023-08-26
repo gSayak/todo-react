@@ -3,38 +3,56 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./components/Footer";
 import Todos from "./components/Todos";
-import { useState } from "react";
-
+import { useState, useEffect } from "react";
+import { AddTodo } from "./components/AddTodo";
 
 function App() {
-  const onDelete = (todo) =>{
-    console.log("I am delete of todo", todo);
-    setTodos(todos.filter((e) => {
-      return e!==todo;
-    }))
+  let initTodo;
+  if (localStorage.getItem("todos") === null) {
+    initTodo = [];
+  } else {
+    initTodo = JSON.parse(localStorage.getItem("todos"));
   }
-  const[todos, setTodos] = useState([
-    {
-      sno: 1,
-      title: "Go to market",
-      desc: "You need to go to market to get the job 1 done"
-    },
-    {
-      sno: 2,
-      title: "Go to ghat",
-      desc: "You need to go to ghat to get the job 2 done"
-    },
-    {
-      sno: 3,
-      title: "Go to house",
-      desc: "You need to go to house to get the job 3 done"
-    },
-  ]);
+  const onDelete = (todo) => {
+    console.log("I am delete of todo", todo);
+    setTodos(
+      todos.filter((e) => {
+        return e !== todo;
+      })
+    );
+    localStorage.setItem("todos", JSON.stringify(todos));
+  };
+
+  const addTodo = (title, desc) => {
+    console.log("Added props", title, desc);
+    let sno;
+    if (todos.length === 0) {
+      sno = 0;
+    } else {
+      sno = todos[todos.length - 1].sno + 1;
+    }
+    const myTodos = {
+      sno: sno,
+      title: title,
+      desc: desc,
+    };
+    setTodos([...todos, myTodos]);
+
+    console.log(myTodos);
+  };
+
+  const [todos, setTodos] = useState(initTodo);
+  useEffect(() => {
+    return () => {
+      localStorage.setItem("todos", JSON.stringify(todos));
+    };
+  }, [todos]);
 
   return (
     <>
       <Header title="My Todo List" />
-      <Todos todos ={todos} onDelete={onDelete}/>
+      <AddTodo addTodo={addTodo} />
+      <Todos todos={todos} onDelete={onDelete} />
       <Footer />
     </>
   );

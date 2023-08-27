@@ -1,14 +1,18 @@
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Header from "./components/Header";
+
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Footer from "./components/Footer";
 import Todos from "./components/Todos";
 import { useState, useEffect } from "react";
 import { AddTodo } from "./components/AddTodo";
+import About from "./components/About";
+
 
 function App() {
   let initTodo;
-  console.log(localStorage.getItem("todos"))
+  console.log(localStorage.getItem("todos"));
   if (localStorage.getItem("todos") === null) {
     initTodo = [];
   } else {
@@ -49,10 +53,37 @@ function App() {
 
   return (
     <>
-      <Header title="My Todo List" />
-      <AddTodo addTodo={addTodo} />
-      <Todos todos={todos} onDelete={onDelete} />
-      <Footer />
+      <Router>
+        <Header title="My Todo List" />
+        <Switch>
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return (
+                <>
+                  <AddTodo addTodo={addTodo} />
+                  <Todos todos={todos} onDelete={onDelete} />
+                </>
+              )
+            }}
+          ></Route>
+          <Route
+            exact
+            path="/about"
+            render={() => {
+              console.log("I am in about");
+              return (
+                <>
+                  
+                  <About />
+                </>
+              )
+            }}
+          ></Route>
+        </Switch>
+        <Footer />
+      </Router>
     </>
   );
 }
